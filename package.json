@@ -1,0 +1,25 @@
+{
+    "name": "GariggueSsreflect",
+    "dependencies": {
+        "@opam/coq": "8.16.1",
+        "coq-mathcomp-ssreflect": "*"
+    },
+    "resolutions": {
+        "coq-mathcomp-ssreflect": {
+            "source": "math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
+            "override": {
+                "dependencies": {
+                    "@opam/coq": "*"
+                },
+                "buildsInSource": true,
+                "buildEnv": {
+                    "HOME": "#{self.target_dir}",
+                    "COQBIN": "#{@opam/coq.bin}/",
+                    "COQLIB": "#{@opam/coq.lib}/coq/",
+                    "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+                    "COQMAKEFILEOPTIONS": "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
+                }
+            }
+        }
+    }
+}

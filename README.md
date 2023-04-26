@@ -1,0 +1,15 @@
+## What is it?
+A repo for tracking my exercises for https://www.math.nagoya-u.ac.jp/~garrigue/lecture/2023_SS/index.html
+
+## What is cool thing about it?
+Rather than opam's intermediate feature for managing localized development environment, in this repo, leveraging [esy](https://esy.sh/en/)'s feature.
+
+Thanks to [WasmCert-Coq](https://github.com/WasmCert/WasmCert-Coq) project, from which I inspired a lot to make current project structure.
+
+## How to build localized environment?
+
+``` sh
+esy shell
+```
+should set up all the necessary tooling for a sanitized environment.
+
