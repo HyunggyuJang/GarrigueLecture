@@ -53,17 +53,7 @@ Proof. elim: n => //=. Qed.
 Lemma multC m n : m * n = n * m.
 Proof. elim: m => [|m] //= ->. by rewrite multnS. Qed.
 Lemma multnDr m n p : (m + n) * p = m * p + n * p.
-Proof.
-  elim: p => [|p] //=.
-    by rewrite !multn0.
-  rewrite !multnS => ->.
-  rewrite -!plusA.
-  apply: f_equal2_plus => //.
-  rewrite plusC.
-  rewrite -!plusA.
-  apply: f_equal2_plus => //.
-  by rewrite plusC.
-Qed.
+Proof. elim: m => /= [|m ->] //. by rewrite plusA. Qed.
 
 Lemma multA m n p : m * (n * p) = (m * n) * p.
 Proof.
@@ -74,25 +64,22 @@ Fixpoint sum n := if n is S m then n + sum m else 0.
 Print sum. (* if .. is は match .. with に展開される *)
 Lemma double_sum n : 2 * sum n = n * (n + 1).
 Proof.
-  elim: n => [|n] //=.
-  rewrite !plusn0.
-  rewrite multnS => <- /=.
-  apply: eq_S.
-  rewrite -!plusA.
-  apply: f_equal2_plus => //=.
-  rewrite plusC.
-  rewrite plusSn.
-  apply: eq_S.
+  elim: n => /= [|n IH] //.
+  rewrite multnS -IH /=.
+  rewrite !plusnS !plusA /=.
+  rewrite ![_+0]plusC [_+n]plusC /=.
   by rewrite plusA.
 Qed.
 
 Lemma square_eq a b : (a + b) * (a + b) = a * a + 2 * a * b + b * b.
 Proof.
-  rewrite !multnDr.
-  repeat rewrite multC multnDr; simpl.
+  rewrite multnDr.
+  rewrite (multC a) (multC b) !multnDr.
+  rewrite (multC b) /=.
   rewrite plusn0.
-  rewrite -!plusA.
-  apply: f_equal2_plus => //.
-  rewrite [b * (a + b)]multC multnDr.
-  by rewrite multC.
-Qed. (* 帰納法なしで証明できる *)
+  by rewrite !plusA.
+Qed.
+
+Require Import ArithRing. (* nat における半環構造 *)
+Lemma square_eq' a b : (a + b) * (a + b) = a * a + 2 * a * b + b * b.
+Proof. ring. Qed.
