@@ -35,7 +35,7 @@ Section SystemF.
     - apply: fex => x px. by exists x.
                               - move => X H. by apply: (H x px).
   Qed.
-  Definition Nat := forall X : Prop, (X -> X) -> X -> X.
+  Definition Nat := forall X : Set, (X -> X) -> X -> X.
   Definition Zero : Nat := fun X f x => x.
   Definition Succ (N : Nat) : Nat := fun X f x => f (N X f x).
   Definition Plus (M N : Nat) : Nat := fun X f x => M X f (N X f x).
@@ -86,12 +86,12 @@ Section SystemF.
   Qed.
 
   Section ProdSum. (* 値の対と直和も定義できます *)
-    Variables X Y : Prop.
-    Definition Prod := forall Z : Prop, (X -> Y -> Z) -> Z.
+    Variables X Y : Set.
+    Definition Prod := forall Z : Set, (X -> Y -> Z) -> Z.
     Definition Pair (x : X) (y : Y) : Prod := fun Z f => f x y.
     Definition Fst (p : Prod) := p _ (fun x y => x).
     Definition Snd (p : Prod) := p _ (fun x y => y).
-    Definition Sum := forall Z : Prop, (X -> Z) -> (Y -> Z) -> Z.
+    Definition Sum := forall Z : Set, (X -> Z) -> (Y -> Z) -> Z.
     Definition InL x : Sum := fun Z f g => f x.
     Definition InR x : Sum := fun Z f g => g x.
   End ProdSum.
@@ -108,5 +108,9 @@ Section SystemF.
     by rewrite [in RHS]/Succ -IH.
   Qed.
   (* Nat が Set で定義されているときだけ証明可能 *)
-  Lemma Nat_of_nat_ok : forall n, Nat_of_nat n _ S O = n. Abort.
+  Lemma Nat_of_nat_ok : forall n, Nat_of_nat n _ S O = n.
+  Proof.
+    elim => //= n IH.
+    by rewrite [LHS]/Succ IH.
+  Qed.
 End SystemF.
