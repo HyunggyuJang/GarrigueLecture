@@ -1,5 +1,10 @@
 {
     "name": "GariggueSsreflect",
+    "esy": {
+        "buildEnv": {
+            "COQPATH": "#{@opam/coq.lib}/coq/user-contrib:#{coq-mathcomp-ssreflect.install}/user-contrib"
+        }
+    },
     "dependencies": {
         "@opam/coq": "8.16.1",
         "coq-mathcomp-ssreflect": "*"

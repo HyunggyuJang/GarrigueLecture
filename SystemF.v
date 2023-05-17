@@ -103,8 +103,10 @@ Section SystemF.
   Theorem Pred_ok : eq_Nat_fun Pred pred.
   Proof.
     move => n X f x.
-    elim: n => // n IH.
-    Abort.
+    elim: n => //= n.
+    case: n => //= n IH.
+    by rewrite [in RHS]/Succ -IH.
+  Qed.
   (* Nat が Set で定義されているときだけ証明可能 *)
   Lemma Nat_of_nat_ok : forall n, Nat_of_nat n _ S O = n. Abort.
 End SystemF.
