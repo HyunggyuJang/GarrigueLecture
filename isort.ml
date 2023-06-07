@@ -1,4 +1,7 @@
 
+type __ = Obj.t
+let __ = let rec f _ = Obj.repr f in Obj.repr f
+
 type bool =
 | True
 | False
@@ -11,9 +14,6 @@ type 'a list =
 | Nil
 | Cons of 'a * 'a list
 
-type 'a sig0 = 'a
-  (* singleton inductive, whose constructor was exist *)
-
 (** val sub : nat -> nat -> nat **)
 
 let rec sub n m =
@@ -22,6 +22,82 @@ let rec sub n m =
   | S k -> (match m with
             | O -> n
             | S l -> sub k l)
+
+type reflect =
+| ReflectT
+| ReflectF
+
+(** val iffP : bool -> reflect -> reflect **)
+
+let iffP _ pb =
+  let _evar_0_ = fun _ _ _ -> ReflectT in
+  let _evar_0_0 = fun _ _ _ -> ReflectF in
+  (match pb with
+   | ReflectT -> _evar_0_ __ __ __
+   | ReflectF -> _evar_0_0 __ __ __)
+
+(** val idP : bool -> reflect **)
+
+let idP = function
+| True -> ReflectT
+| False -> ReflectF
+
+type 't pred = 't -> bool
+
+type 't rel = 't -> 't pred
+
+module Equality =
+ struct
+  type 't axiom = 't -> 't -> reflect
+
+  type 't mixin_of = { op : 't rel; mixin_of__1 : 't axiom }
+
+  (** val op : 'a1 mixin_of -> 'a1 rel **)
+
+  let op m =
+    m.op
+
+  type coq_type = __ mixin_of
+    (* singleton inductive, whose constructor was Pack *)
+
+  type sort = __
+
+  (** val coq_class : coq_type -> sort mixin_of **)
+
+  let coq_class cT =
+    cT
+ end
+
+(** val eq_op : Equality.coq_type -> Equality.sort rel **)
+
+let eq_op t =
+  (Equality.coq_class t).Equality.op
+
+(** val eqn : nat -> nat -> bool **)
+
+let rec eqn m n =
+  match m with
+  | O -> (match n with
+          | O -> True
+          | S _ -> False)
+  | S m' -> (match n with
+             | O -> False
+             | S n' -> eqn m' n')
+
+(** val eqnP : nat Equality.axiom **)
+
+let eqnP n m =
+  iffP (eqn n m) (idP (eqn n m))
+
+(** val nat_eqMixin : nat Equality.mixin_of **)
+
+let nat_eqMixin =
+  { Equality.op = eqn; Equality.mixin_of__1 = eqnP }
+
+(** val nat_eqType : Equality.coq_type **)
+
+let nat_eqType =
+  Obj.magic nat_eqMixin
 
 (** val subn_rec : nat -> nat -> nat **)
 
@@ -33,34 +109,31 @@ let subn_rec =
 let subn =
   subn_rec
 
-(** val insert : ('a1 -> 'a1 -> bool) -> 'a1 -> 'a1 list -> 'a1 list **)
+(** val leq : nat -> nat -> bool **)
 
-let rec insert le a l = match l with
-| Nil -> Cons (a, Nil)
+let leq m n =
+  eq_op nat_eqType (Obj.magic subn m n) (Obj.magic O)
+
+(** val insert :
+    Equality.coq_type -> (Equality.sort -> Equality.sort -> bool) ->
+    Equality.sort -> Equality.sort list -> Equality.sort list **)
+
+let rec insert a le a0 l = match l with
+| Nil -> Cons (a0, Nil)
 | Cons (b, l') ->
-  (match le a b with
-   | True -> Cons (a, l)
-   | False -> Cons (b, (insert le a l')))
+  (match le a0 b with
+   | True -> Cons (a0, l)
+   | False -> Cons (b, (insert a le a0 l')))
 
-(** val isort : ('a1 -> 'a1 -> bool) -> 'a1 list -> 'a1 list **)
+(** val isort :
+    Equality.coq_type -> (Equality.sort -> Equality.sort -> bool) ->
+    Equality.sort list -> Equality.sort list **)
 
-let rec isort le = function
+let rec isort a le = function
 | Nil -> Nil
-| Cons (a, l') -> insert le a (isort le l')
+| Cons (a0, l') -> insert a le a0 (isort a le l')
 
-(** val safe_isort : ('a1 -> 'a1 -> bool) -> 'a1 list -> 'a1 list **)
+(** val isortn : nat list -> nat list **)
 
-let safe_isort =
-  isort
-
-(** val leq' : nat -> nat -> bool **)
-
-let leq' m n =
-  match subn m n with
-  | O -> True
-  | S _ -> False
-
-(** val isort_leq : nat list -> nat list **)
-
-let isort_leq =
-  safe_isort leq'
+let isortn =
+  Obj.magic isort nat_eqType leq
