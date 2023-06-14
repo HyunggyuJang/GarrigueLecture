@@ -32,7 +32,15 @@ Section Nagoya2013.
       have H': 1 <= 3 ^ m. admit.
       rewrite !addnBA => //.
       move => {H} {H'}.
-      have -> : 2 ^ m - 2 + 3 ^ m - 1 = 2 ^ m + (3 ^ m - 3). admit.
+      have -> : 2 ^ m - 2 + 3 ^ m - 1 = 2 ^ m + (3 ^ m - 3).
+        rewrite addnC.
+        have H : 2 ^ m >= 2. admit.
+        rewrite addnBA => //.
+        move => {H}.
+        rewrite -subnDA.
+        rewrite addnC.
+        have H : 3 ^ m >= 3. admit.
+        by rewrite addnBA => //.
       by rewrite addKn.
     }
     rewrite -Tm1.
