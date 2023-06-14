@@ -77,7 +77,10 @@ Section Nagoya2013.
     have Hm': m > 0 by apply ltnW.
     have -> : n.+3 ^ m - n.+3 = n.+2 ^ m - n.+2 + (n.+3 ^ m - 1 - n.+2 ^ m). admit.
     rewrite -IHn /Tm.
-    have -> : n.+3 ^ m - 1 - n.+2 ^ m = \sum_(1 <= k < m) 'C(m, k) * n.+2 ^ k. admit.
+    have -> : n.+3 ^ m - 1 - n.+2 ^ m = \sum_(1 <= k < m) 'C(m, k) * n.+2 ^ k.
+      transitivity (\sum_(1 <= k < m) 'C(m, k) * (n.+2 ^ k * 1 ^ (m - k))).
+      symmetry.
+      admit. admit.
     have -> : \sum_(1 <= k < m) 'C(m, k) * n.+2 ^ k = \sum_(1 <= k < m) 'C(m, k) * (Sk k n.+2 - Sk k n.+1).
     {
       apply: eq_bigr => i _.
