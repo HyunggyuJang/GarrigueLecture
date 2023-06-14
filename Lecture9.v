@@ -77,10 +77,19 @@ Section Nagoya2013.
     have Hm': m > 0 by apply ltnW.
     have -> : n.+3 ^ m - n.+3 = n.+2 ^ m - n.+2 + (n.+3 ^ m - 1 - n.+2 ^ m). admit.
     rewrite -IHn /Tm.
-    have -> : n.+3 ^ m - 1 - n.+2 ^ m = \sum_(1 <= k < m) 'C(m, k) * n.+2 ^ k.
-      transitivity (\sum_(1 <= k < m) 'C(m, k) * (n.+2 ^ k * 1 ^ (m - k))).
-      symmetry.
-      admit. admit.
+    have <- : \sum_(1 <= k < m) 'C(m, k) * n.+2 ^ k = n.+3 ^ m - 1 - n.+2 ^ m.
+      transitivity (\sum_(0 <= k < m.+1) 'C(m,k) * n.+2 ^ k - 1 - n.+2 ^ m ).
+        symmetry.
+        rewrite (@big_cat_nat _ _ _ m) //=.
+        rewrite (@big_cat_nat _ _ _ 1) //=.
+        rewrite addnAC !big_nat1 bin0 binn expn0 !mul1n /=.
+        by rewrite -subnDA addKn.
+      transitivity (\sum_(0 <= k < m.+1) 'C(m, k) * (1 ^ (m - k) * n.+2 ^ k) - 1 - n.+2 ^ m).
+        repeat congr (_ - _).
+        apply: eq_bigr => i _.
+        by rewrite exp1n mul1n.
+      rewrite big_mkord.
+      by rewrite -Pascal.
     have -> : \sum_(1 <= k < m) 'C(m, k) * n.+2 ^ k = \sum_(1 <= k < m) 'C(m, k) * (Sk k n.+2 - Sk k n.+1).
     {
       apply: eq_bigr => i _.
@@ -92,8 +101,11 @@ Section Nagoya2013.
     }
     rewrite -big_split /=.
     apply: eq_bigr => i _.
-    rewrite -mulnDr addnBA => //.
-    by rewrite addKn.
+    rewrite -mulnDr addnBA.
+      by rewrite addKn.
+    rewrite /Sk.
+    rewrite [leqRHS](@big_cat_nat _ _ _ n.+2) //=.
+    by rewrite leq_addr.
   Admitted.
   Theorem Skp p k : p > 2 -> prime p -> 1 <= k < p.-1 -> p %| Sk k p.-1.
   Admitted.
