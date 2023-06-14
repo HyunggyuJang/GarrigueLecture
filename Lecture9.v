@@ -59,13 +59,29 @@ Section Nagoya2013.
     by rewrite !addn0 -mulnDr.
     congr (_ + _).
     transitivity ((\sum_(0 <= k < m.+1) 'C(m,k) * 2^k) - 1 - 2^m).
-  Admitted.
+      symmetry.
+      rewrite (@big_cat_nat _ _ _ m) //=.
+      rewrite (@big_cat_nat _ _ _ 1) //=; last by apply ltnW.
+      rewrite addnAC !big_nat1 bin0 binn expn0 => /=.
+      rewrite -subnDA !mul1n addKn.
+      by apply: eq_bigr.
+    rewrite big_mkord.
+    repeat congr (_ - _).
+    apply eq_bigr => i _.
+    by rewrite exp1n mul1n.
+  Qed.
   Theorem Tmn n : Tm n.+1 = n.+2^m - n.+2.
   Proof.
     elim:n => [|n IHn] /=.
-    by apply Tm1.
+      by apply Tm1.
     have Hm': m > 0 by apply ltnW.
-    have ->: n.+3 ^ m - n.+3 = n.+2 ^ m - n.+2 + (n.+3 ^ m - 1 - n.+2 ^ m).
+    have -> : n.+3 ^ m - n.+3 = n.+2 ^ m - n.+2 + (n.+3 ^ m - 1 - n.+2 ^ m). admit.
+    rewrite -IHn /Tm.
+    have -> : n.+3 ^ m - 1 - n.+2 ^ m = \sum_(1 <= k < m) 'C(m, k) * (Sk k n.+2 - Sk k n.+1). admit.
+    rewrite -big_split /=.
+    apply: eq_bigr => i _.
+    rewrite -mulnDr addnBA => //.
+    by rewrite addKn.
   Admitted.
   Theorem Skp p k : p > 2 -> prime p -> 1 <= k < p.-1 -> p %| Sk k p.-1.
   Admitted.
