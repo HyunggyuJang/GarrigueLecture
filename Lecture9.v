@@ -75,7 +75,17 @@ Section Nagoya2013.
     elim:n => [|n IHn] /=.
       by apply Tm1.
     have Hm': m > 0 by apply ltnW.
-    have -> : n.+3 ^ m - n.+3 = n.+2 ^ m - n.+2 + (n.+3 ^ m - 1 - n.+2 ^ m). admit.
+    have -> : n.+3 ^ m - n.+3 = n.+2 ^ m - n.+2 + (n.+3 ^ m - 1 - n.+2 ^ m).
+      rewrite addnC addnBA.
+        rewrite addnC addnBA.
+          rewrite addKn.
+          by rewrite -subnDA.
+        rewrite leq_psubRL.
+          rewrite ltn_exp2r //.
+        rewrite expn_gt0 //.
+      apply: (@ltn_trans n.+2) => //.
+      rewrite -[ltnLHS]expn1.
+      rewrite ltn_exp2l //.
     rewrite -IHn /Tm.
     have <- : \sum_(1 <= k < m) 'C(m, k) * n.+2 ^ k = n.+3 ^ m - 1 - n.+2 ^ m.
       transitivity (\sum_(0 <= k < m.+1) 'C(m,k) * n.+2 ^ k - 1 - n.+2 ^ m ).
@@ -106,7 +116,7 @@ Section Nagoya2013.
     rewrite /Sk.
     rewrite [leqRHS](@big_cat_nat _ _ _ n.+2) //=.
     by rewrite leq_addr.
-  Admitted.
+  Qed.
   Theorem Skp p k : p > 2 -> prime p -> 1 <= k < p.-1 -> p %| Sk k p.-1.
   Admitted.
 End Nagoya2013.
