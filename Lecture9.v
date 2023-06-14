@@ -28,18 +28,24 @@ Section Nagoya2013.
     rewrite /Tm.
     have -> : 3^m - 3 = 2^m - 2 + (3^m - 1 - 2^m).
     {
-      have H: 2 ^ m <= 3 ^ m - 1. admit.
-      have H': 1 <= 3 ^ m. admit.
+      have H: 3 <= 3 ^ m.
+        rewrite -[leqLHS](expn1 3).
+        apply: leq_pexp2l => //.
+        by apply: ltnW.
+      have H': 2 <= 2 ^ m.
+        rewrite -[leqLHS](expn1 2).
+        apply: leq_pexp2l => //.
+        by apply: ltnW.
+      have H'': 2 ^ m <= 3 ^ m - 1.
+        rewrite leq_psubRL; last by apply: ltnW.
+        rewrite ltn_exp2r => //; last by apply: ltnW.
+      have H''': 1 <= 3 ^ m. apply: ltnW. by apply: ltnW.
       rewrite !addnBA => //.
-      move => {H} {H'}.
       have -> : 2 ^ m - 2 + 3 ^ m - 1 = 2 ^ m + (3 ^ m - 3).
         rewrite addnC.
-        have H : 2 ^ m >= 2. admit.
         rewrite addnBA => //.
-        move => {H}.
         rewrite -subnDA.
         rewrite addnC.
-        have H : 3 ^ m >= 3. admit.
         by rewrite addnBA => //.
       by rewrite addKn.
     }
