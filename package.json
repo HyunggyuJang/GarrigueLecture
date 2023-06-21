@@ -40,7 +40,7 @@
                     "HOME": "#{self.target_dir}",
                     "COQBIN": "#{@opam/coq.bin}/",
                     "COQLIB": "#{@opam/coq.lib}/coq/",
-                    "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+                    "COQPATH": "#{@opam/coq.lib}/coq/user-contrib:#{@opam/coq-mathcomp-ssreflect.install}/user-contrib",
                     "COQMAKEFILEOPTIONS": "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
                 }
             }
@@ -50,6 +50,7 @@
             "override": {
                 "dependencies": {
                     "@opam/coq": "*",
+                    "@opam/coq-mathcomp-ssreflect": "*",
                     "@opam/coq-mathcomp-fingroup": "*"
                 },
                 "buildsInSource": true,
@@ -57,7 +58,7 @@
                     "HOME": "#{self.target_dir}",
                     "COQBIN": "#{@opam/coq.bin}/",
                     "COQLIB": "#{@opam/coq.lib}/coq/",
-                    "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+                    "COQPATH": "#{@opam/coq.lib}/coq/user-contrib:#{@opam/coq-mathcomp-ssreflect.install}/user-contrib:#{@opam/coq-mathcomp-fingroup.install}/user-contrib",
                     "COQMAKEFILEOPTIONS": "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
                 }
             }

@@ -1,5 +1,5 @@
 {
-  "checksum": "108e23dd558bc04048d92761d38067f8",
+  "checksum": "07385876b9fe4411df0b279f2423b3f5",
   "root": "GariggueSsreflect@link-dev:./package.json",
   "node": {
     "ocaml@4.14.0@d41d8cd9": {
@@ -46,9 +46,9 @@
       "dependencies": [],
       "devDependencies": []
     },
-    "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@d552e7bf": {
+    "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@b58ecd20": {
       "id":
-        "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@d552e7bf",
+        "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@b58ecd20",
       "name": "coq-mathcomp-algebra",
       "version":
         "github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
@@ -62,6 +62,7 @@
         {
           "dependencies": {
             "@opam/coq": "*",
+            "@opam/coq-mathcomp-ssreflect": "*",
             "@opam/coq-mathcomp-fingroup": "*"
           },
           "buildsInSource": true,
@@ -69,18 +70,20 @@
             "HOME": "#{self.target_dir}",
             "COQBIN": "#{@opam/coq.bin}/",
             "COQLIB": "#{@opam/coq.lib}/coq/",
-            "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+            "COQPATH":
+              "#{@opam/coq.lib}/coq/user-contrib:#{@opam/coq-mathcomp-ssreflect.install}/user-contrib:#{@opam/coq-mathcomp-fingroup.install}/user-contrib",
             "COQMAKEFILEOPTIONS":
               "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
           }
         }
       ],
       "dependencies": [
-        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430",
+        "@opam/coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc",
+        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@dcd11e21",
         "@opam/coq@opam:8.16.1@3ae3d6b1", "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
-        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430"
+        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@dcd11e21"
       ]
     },
     "GariggueSsreflect@link-dev:./package.json": {
@@ -94,9 +97,9 @@
       },
       "overrides": [],
       "dependencies": [
-        "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@d552e7bf",
+        "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@b58ecd20",
         "@opam/coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc",
-        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430",
+        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@dcd11e21",
         "@opam/coq@opam:8.16.1@3ae3d6b1"
       ],
       "devDependencies": []
@@ -218,9 +221,9 @@
       ],
       "devDependencies": [ "@opam/coq@opam:8.16.1@3ae3d6b1" ]
     },
-    "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430": {
+    "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@dcd11e21": {
       "id":
-        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430",
+        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@dcd11e21",
       "name": "@opam/coq-mathcomp-fingroup",
       "version":
         "github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
@@ -241,7 +244,8 @@
             "HOME": "#{self.target_dir}",
             "COQBIN": "#{@opam/coq.bin}/",
             "COQLIB": "#{@opam/coq.lib}/coq/",
-            "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+            "COQPATH":
+              "#{@opam/coq.lib}/coq/user-contrib:#{@opam/coq-mathcomp-ssreflect.install}/user-contrib",
             "COQMAKEFILEOPTIONS":
               "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
           }
