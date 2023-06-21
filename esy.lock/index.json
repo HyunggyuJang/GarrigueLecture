@@ -1,5 +1,5 @@
 {
-  "checksum": "6939bf8bc0bb09d7978338c2b946e353",
+  "checksum": "108e23dd558bc04048d92761d38067f8",
   "root": "GariggueSsreflect@link-dev:./package.json",
   "node": {
     "ocaml@4.14.0@d41d8cd9": {
@@ -46,21 +46,24 @@
       "dependencies": [],
       "devDependencies": []
     },
-    "coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc": {
+    "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@d552e7bf": {
       "id":
-        "coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc",
-      "name": "coq-mathcomp-ssreflect",
+        "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@d552e7bf",
+      "name": "coq-mathcomp-algebra",
       "version":
-        "github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
+        "github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
       "source": {
         "type": "install",
         "source": [
-          "github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3"
+          "github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3"
         ]
       },
       "overrides": [
         {
-          "dependencies": { "@opam/coq": "*" },
+          "dependencies": {
+            "@opam/coq": "*",
+            "@opam/coq-mathcomp-fingroup": "*"
+          },
           "buildsInSource": true,
           "buildEnv": {
             "HOME": "#{self.target_dir}",
@@ -73,9 +76,12 @@
         }
       ],
       "dependencies": [
+        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430",
         "@opam/coq@opam:8.16.1@3ae3d6b1", "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
-      "devDependencies": [ "@opam/coq@opam:8.16.1@3ae3d6b1" ]
+      "devDependencies": [
+        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430"
+      ]
     },
     "GariggueSsreflect@link-dev:./package.json": {
       "id": "GariggueSsreflect@link-dev:./package.json",
@@ -88,7 +94,9 @@
       },
       "overrides": [],
       "dependencies": [
-        "coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc",
+        "coq-mathcomp-algebra@github:math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@d552e7bf",
+        "@opam/coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc",
+        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430",
         "@opam/coq@opam:8.16.1@3ae3d6b1"
       ],
       "devDependencies": []
@@ -152,20 +160,20 @@
       ],
       "devDependencies": [ "ocaml@4.14.0@d41d8cd9" ]
     },
-    "@opam/dune@opam:3.7.1@40db2f22": {
-      "id": "@opam/dune@opam:3.7.1@40db2f22",
+    "@opam/dune@opam:3.8.2@95be1b5e": {
+      "id": "@opam/dune@opam:3.8.2@95be1b5e",
       "name": "@opam/dune",
-      "version": "opam:3.7.1",
+      "version": "opam:3.8.2",
       "source": {
         "type": "install",
         "source": [
-          "archive:https://opam.ocaml.org/cache/sha256/ad/adfc38f14c0188a2ad80d61451d011d27ab8839b717492d7ad42f7cb911c54c3#sha256:adfc38f14c0188a2ad80d61451d011d27ab8839b717492d7ad42f7cb911c54c3",
-          "archive:https://github.com/ocaml/dune/releases/download/3.7.1/dune-3.7.1.tbz#sha256:adfc38f14c0188a2ad80d61451d011d27ab8839b717492d7ad42f7cb911c54c3"
+          "archive:https://opam.ocaml.org/cache/sha256/5a/5a6ec790128616b6b46616427fa9c8f2ba0d6ef5a405bf8fdbc6f82dc0d935fd#sha256:5a6ec790128616b6b46616427fa9c8f2ba0d6ef5a405bf8fdbc6f82dc0d935fd",
+          "archive:https://github.com/ocaml/dune/releases/download/3.8.2/dune-3.8.2.tbz#sha256:5a6ec790128616b6b46616427fa9c8f2ba0d6ef5a405bf8fdbc6f82dc0d935fd"
         ],
         "opam": {
           "name": "dune",
-          "version": "3.7.1",
-          "path": "esy.lock/opam/dune.3.7.1"
+          "version": "3.8.2",
+          "path": "esy.lock/opam/dune.3.8.2"
         }
       },
       "overrides": [],
@@ -177,6 +185,74 @@
       "devDependencies": [
         "ocaml@4.14.0@d41d8cd9", "@opam/base-unix@opam:base@87d0b2eb",
         "@opam/base-threads@opam:base@36803084"
+      ]
+    },
+    "@opam/coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc": {
+      "id":
+        "@opam/coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc",
+      "name": "@opam/coq-mathcomp-ssreflect",
+      "version":
+        "github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
+      "source": {
+        "type": "install",
+        "source": [
+          "github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3"
+        ]
+      },
+      "overrides": [
+        {
+          "dependencies": { "@opam/coq": "*" },
+          "buildsInSource": true,
+          "buildEnv": {
+            "HOME": "#{self.target_dir}",
+            "COQBIN": "#{@opam/coq.bin}/",
+            "COQLIB": "#{@opam/coq.lib}/coq/",
+            "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+            "COQMAKEFILEOPTIONS":
+              "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
+          }
+        }
+      ],
+      "dependencies": [
+        "@opam/coq@opam:8.16.1@3ae3d6b1", "@esy-ocaml/substs@0.0.1@d41d8cd9"
+      ],
+      "devDependencies": [ "@opam/coq@opam:8.16.1@3ae3d6b1" ]
+    },
+    "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430": {
+      "id":
+        "@opam/coq-mathcomp-fingroup@github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@73099430",
+      "name": "@opam/coq-mathcomp-fingroup",
+      "version":
+        "github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
+      "source": {
+        "type": "install",
+        "source": [
+          "github:math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3"
+        ]
+      },
+      "overrides": [
+        {
+          "dependencies": {
+            "@opam/coq": "*",
+            "@opam/coq-mathcomp-ssreflect": "*"
+          },
+          "buildsInSource": true,
+          "buildEnv": {
+            "HOME": "#{self.target_dir}",
+            "COQBIN": "#{@opam/coq.bin}/",
+            "COQLIB": "#{@opam/coq.lib}/coq/",
+            "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+            "COQMAKEFILEOPTIONS":
+              "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
+          }
+        }
+      ],
+      "dependencies": [
+        "@opam/coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc",
+        "@opam/coq@opam:8.16.1@3ae3d6b1", "@esy-ocaml/substs@0.0.1@d41d8cd9"
+      ],
+      "devDependencies": [
+        "@opam/coq-mathcomp-ssreflect@github:math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3@4962f4cc"
       ]
     },
     "@opam/coq@opam:8.16.1@3ae3d6b1": {
@@ -199,14 +275,14 @@
       "dependencies": [
         "ocaml@4.14.0@d41d8cd9", "@opam/zarith@opam:1.12@23811ea3",
         "@opam/ocamlfind@opam:1.9.6@da5169c7",
-        "@opam/dune@opam:3.7.1@40db2f22",
+        "@opam/dune@opam:3.8.2@95be1b5e",
         "@opam/conf-findutils@opam:1@8454cd64",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
         "ocaml@4.14.0@d41d8cd9", "@opam/zarith@opam:1.12@23811ea3",
         "@opam/ocamlfind@opam:1.9.6@da5169c7",
-        "@opam/dune@opam:3.7.1@40db2f22"
+        "@opam/dune@opam:3.8.2@95be1b5e"
       ]
     },
     "@opam/conf-gmp@opam:4@c394e8f1": {

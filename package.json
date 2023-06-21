@@ -2,19 +2,55 @@
     "name": "GariggueSsreflect",
     "esy": {
         "buildEnv": {
-            "COQPATH": "#{@opam/coq.lib}/coq/user-contrib:#{coq-mathcomp-ssreflect.install}/user-contrib"
+            "COQPATH": "#{@opam/coq.lib}/coq/user-contrib:#{@opam/coq-mathcomp-ssreflect.install}/user-contrib:#{coq-mathcomp-algebra.install}/user-contrib"
         }
     },
     "dependencies": {
         "@opam/coq": "8.16.1",
-        "coq-mathcomp-ssreflect": "*"
+        "@opam/coq-mathcomp-ssreflect": "*",
+        "@opam/coq-mathcomp-fingroup": "*",
+        "coq-mathcomp-algebra": "*"
     },
     "resolutions": {
-        "coq-mathcomp-ssreflect": {
+        "@opam/coq-mathcomp-ssreflect": {
             "source": "math-comp/math-comp:coq-mathcomp-ssreflect.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
             "override": {
                 "dependencies": {
                     "@opam/coq": "*"
+                },
+                "buildsInSource": true,
+                "buildEnv": {
+                    "HOME": "#{self.target_dir}",
+                    "COQBIN": "#{@opam/coq.bin}/",
+                    "COQLIB": "#{@opam/coq.lib}/coq/",
+                    "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+                    "COQMAKEFILEOPTIONS": "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
+                }
+            }
+        },
+        "@opam/coq-mathcomp-fingroup": {
+            "source": "math-comp/math-comp:coq-mathcomp-fingroup.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
+            "override": {
+                "dependencies": {
+                    "@opam/coq": "*",
+                    "@opam/coq-mathcomp-ssreflect": "*"
+                },
+                "buildsInSource": true,
+                "buildEnv": {
+                    "HOME": "#{self.target_dir}",
+                    "COQBIN": "#{@opam/coq.bin}/",
+                    "COQLIB": "#{@opam/coq.lib}/coq/",
+                    "COQPATH": "#{@opam/coq.lib}/coq/user-contrib",
+                    "COQMAKEFILEOPTIONS": "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
+                }
+            }
+        },
+        "coq-mathcomp-algebra": {
+            "source": "math-comp/math-comp:coq-mathcomp-algebra.opam#0a5ecb9cea37e2b35045cfdf6c562c3a733605c3",
+            "override": {
+                "dependencies": {
+                    "@opam/coq": "*",
+                    "@opam/coq-mathcomp-fingroup": "*"
                 },
                 "buildsInSource": true,
                 "buildEnv": {
