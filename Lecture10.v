@@ -53,28 +53,54 @@ Section Problem2.
     Theorem equiv2 : projection (p + q) <-> (forall x, p (q x) = 0 /\ q (p x) = 0).
     Proof.
       split=> H x.
-    Admitted.
+        by rewrite !f_g_0 // addrC.
+        rewrite !add_lfunE !linearD /=.
+        by rewrite !(proj1 (H x)) !(proj2 (H x)) addr0 add0r proj_p proj_q.
+    Qed.
   End a.
   Section b.
     Hypothesis proj_pq : projection (p + q).
     Lemma b1a x : x \in limg p -> x \in limg q -> x = 0.
-    Admitted.
+    Proof.
+      move => Pp Pq.
+      have <- : p (q x) = x.
+        rewrite (proj1 (proj_idE q)) //.
+        rewrite (proj1 (proj_idE p)) //.
+      by rewrite f_g_0.
+    Qed.
     Lemma b1b : directv (limg p + limg q).
     Proof.
       apply/directv_addP/eqP.
       rewrite -subv0.
       apply/subvP => u /memv_capP [Hp Hq].
       rewrite memv0.
-    Admitted.
+      by rewrite (b1a u) //.
+    Qed.
     Lemma limg_sub_lker f g :
       projection f -> projection g -> projection (f+g) -> (limg f <= lker g)%VS.
-    Admitted.
-    Lemma b1c : (limg p <= lker q)%VS. Admitted.
-    Lemma b1c' : (limg q <= lker p)%VS. Admitted.
+    Proof.
+      move => Pf Pg Pfg.
+      apply/subvP => u.
+      move => ImgF.
+      have : g (f u) = 0 by rewrite f_g_0 // addrC //.
+      rewrite (proj1 (proj_idE f)) //.
+      move/eqP.
+      by rewrite -memv_ker.
+    Qed.
+    Lemma b1c : (limg p <= lker q)%VS.
+    Proof.
+      apply: limg_sub_lker => //.
+    Qed.
+    Lemma b1c' : (limg q <= lker p)%VS.
+    Proof.
+      apply: limg_sub_lker => //.
+      by rewrite addrC.
+    Qed.
     Lemma limg_addv (f g : 'End(E)) : (limg (f + g)%R <= limg f + limg g)%VS.
     Proof.
       apply/subvP => x /memv_imgP [u _ ->].
-    Admitted.
+      by rewrite add_lfunE memv_add // memv_img // memvf.
+    Qed.
     Theorem b1 : limg (p+q) = (limg p + limg q)%VS.
     Proof.
       apply/eqP; rewrite eqEsubv limg_addv /=.
@@ -82,12 +108,27 @@ Section Problem2.
       have -> : u + v = (p + q) (u + v).
       rewrite lfun_simp !linearD /=.
       rewrite (proj1 (proj_idE p)) // (proj1 (proj_idE q) _ v) //.
-    Admitted.
+      apply (subvP b1c) in Hu.
+      apply (subvP b1c') in Hv.
+      move: Hu Hv.
+      rewrite !memv_ker.
+      move/eqP->.
+      move/eqP->.
+      by rewrite addr0 add0r.
+      by rewrite memv_img // memvf.
+    Qed.
     Theorem b2 : lker (p+q) = (lker p :&: lker q)%VS.
     Proof.
       apply/vspaceP => x.
       rewrite memv_cap !memv_ker add_lfunE.
       case Hpx: (p x == 0).
-    Admitted.
+      move/eqP: Hpx => ->.
+      by rewrite add0r.
+      apply/eqP => /=.
+      move=> /(f_equal p).
+      rewrite linearD /= proj_p f_g_0 // addr0 linear0.
+      move/eqP.
+      by rewrite Hpx.
+    Qed.
   End b.
 End Problem2.
