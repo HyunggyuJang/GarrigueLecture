@@ -70,8 +70,8 @@ Module Iterator. (* Iterating calculator *)
   Inductive cmd : Set :=
   | Assign of nat & expr (* env[n] に結果を入れる *)
   | Seq of cmd & cmd (* 順番に実行 *)
-  | Repeat of expr & cmd. (* n 回繰り返す *)
-  (* | If of expr & cmd. *)
+  | Repeat of expr & cmd (* n 回繰り返す *)
+  | If of expr & cmd.
   (* r <- 1; repeat (i-1) r <- i * r; i <- i-1 *)
   Definition fact :=
     Seq (Assign 1 (Cst 1))
@@ -86,10 +86,10 @@ Module Iterator. (* Iterating calculator *)
         if eval env e is Zpos n (* seq の iter を使う *)
         then iter (Pos.to_nat n) (fun e => eval_cmd e c) env
         else env
-    (* | If e c => *)
-    (*     if eval env e is Zpos n *)
-    (*     then eval_cmd env c *)
-    (*     else env *)
+    | If e c =>
+        if eval env e is Zpos n
+        then eval_cmd env c
+        else env
     end.
   Eval compute in eval_cmd [:: 5%Z] fact.
   Inductive code : Set :=
@@ -100,6 +100,7 @@ Module Iterator. (* Iterating calculator *)
   | Cmul
   | Cset of nat (* スタックの上を n 番目に書き込む *)
   | Crep of nat (* 次の n 個の命令ををスタックの上分繰り返す *)
+  | Cif
   | Cnext. (* 終ったら Cnext の後ろに跳ぶ *)
   Definition step (stack : list Z) c (k : list Z -> list Z) :=
     match c, stack with
@@ -112,6 +113,8 @@ Module Iterator. (* Iterating calculator *)
     | Crep _, Zpos n :: st =>
         iter (Pos.to_nat n) k st (* k はコードの残りが行う計算 *)
     | Crep _, _ :: st => st
+    | Cif, Zpos n :: st => k st
+    | Cif, _ :: st => st
     | Cnext, _ => stack
     | _, _ => nil
     end%Z.
