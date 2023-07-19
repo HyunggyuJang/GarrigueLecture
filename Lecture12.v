@@ -63,89 +63,135 @@ Module Lambda.
     reduce e = Some e' -> reduces e e'.
   Proof.
     move: e'; induction e => //= e'.
-      case He: (reduce e) => [e1|] // [] <-.
-      constructor. by apply: IHe.
+    case He: (reduce e) => [e1|] // [] <-.
+    constructor. by apply: IHe.
     destruct e1 => //.
     - rewrite /=. case He: (reduce e2) => [e2'|] // [] <-.
       constructor. by apply: IHe2.
     - case => <-.
       by constructor.
     - case He1: (reduce (App _ _)) => [e1'|].
-        case => <-.
-        constructor. by apply: IHe1.
+      case => <-.
+      constructor. by apply: IHe1.
       case He: (reduce e2) => [e2'|] // [] <-.
       constructor. by apply: IHe2.
   Qed.
 
-  Lemma eval_abs_commute {n e} : eval n (Abs e) = Abs (eval n e).
-  Proof.
-  Admitted.
-  Lemma RT_closure_preserve_abs {e e'} : RT_closure reduces e e' -> RT_closure reduces (Abs e) (Abs e').
-  Proof.
-    elim => // e0 e1 e2 Hreduce HRTnext.
-    apply: RTnext.
-    by constructor.
-  Qed.
   (* n-step 簡約の健全性 *)
   Theorem eval_ok n e e' : eval n e = e' -> RT_closure reduces e e'.
   Proof.
-    (* Complete n = 0 case first *)
-    case: n => /= [->|] //=.
-    (* Induction on e' *)
-    move: e'; induction e => //= e'.
-      (* e = Var n0 *)
-      (* Suffice to show RTbase case *)
-      by move => _ ->.
-      (* e = Abs e *)
-      (* Complete [reduce e = None] case immediately *)
-      destruct (reduce e) => n <- //.
-      specialize (IHe (eval n e0) n erefl).
-      move: IHe.
-      rewrite eval_abs_commute.
-      by apply: RT_closure_preserve_abs.
-      admit.
-  Admitted.
+    elim: n e => /= [|e1 IH] e.
+    by move ->.
+    case He: reduce => [e2|].
+    move/IH; apply RTnext.
+    by apply reduce_ok.
+    by move ->.
+  Qed.
   Fixpoint closed_expr n e := (* 変数が n 個以下の項 *)
     match e with
     | Var k => k < n
     | App e1 e2 => closed_expr n e1 && closed_expr n e2
     | Abs e1 => closed_expr n.+1 e1
     end.
-  Lemma shift_closed n e : closed_expr n e -> shift n e = e. Admitted.
+  Lemma shift_closed n e : closed_expr n e -> shift n e = e.
+  Proof.
+    move: n; induction e => //= k Hc.
+    + by rewrite leqNgt Hc.
+    + by rewrite IHe.
+    + move/andP: Hc => [Hc1 Hc2].
+      by rewrite IHe1 // IHe2.
+  Qed.
   Lemma open_rec_closed n u e : (* n + 1 個目の変数を代入しても変わらない *)
     closed_expr n e -> open_rec n u e = e.
   Proof.
     move: n u.
     induction e => //= k u Hc.
-    - case: ifP => Hk1.
+    + case: ifP => Hk1.
       by rewrite (eqP Hk1) ltnn in Hc.
       by rewrite leqNgt Hc.
-  Admitted.
-  Lemma closed_iter_app n k e1 e2 :
-    closed_expr k e1 -> closed_expr k e2 -> closed_expr k (iter n (App e1) e2).
-  Admitted.
-  Lemma closed_church n : closed_expr 0 (church n). Admitted.
-  Lemma closed_expr_S n e : closed_expr n e -> closed_expr n.+1 e. Admitted.
+    + by rewrite IHe.
+    + move/andP: Hc => [Hc1 Hc2].
+      by rewrite IHe1 // IHe2.
+  Qed.
+  Proof.
+    move=> He1.
+    elim: n e2 => //= n IHn e2  He2.
+    by rewrite He1 IHn.
+  Qed.
+
+  Lemma closed_church n : closed_expr 0 (church n).
+  Proof.
+    rewrite /church /=.
+    by apply closed_iter_app.
+  Qed.
+
+  Lemma closed_expr_S n e : closed_expr n e -> closed_expr n.+1 e.
+  Proof.
+    move: n.
+    induction e => //= k.
+    + by apply ltnW.
+    + by apply IHe.
+    + move/andP => [He1 He2].
+      by rewrite IHe1 // IHe2.
+  Qed.
+
   Hint Resolve closed_iter_app closed_church closed_expr_S.
+
   Lemma open_iter_app k n u e1 e2 :
     open_rec k u (iter n (App e1) e2) =
       iter n (App (open_rec k u e1)) (open_rec k u e2).
-  Admitted.
-  Lemma reduces_iter n e1 e2 e2' :
-    reduces e2 e2' -> reduces (iter n (App e1) e2) (iter n (App e1) e2').
-  Admitted.
-  Theorem chadd_ok' m n : (* Church 数の足し算が正しい *)
+  Proof.
+    elim: n e2 => //= n IHn e2.
+    by rewrite IHn.
+  Qed.
+
+  Theorem chadd_ok' m n :
     RT_closure reduces (App (App chadd (church m)) (church n)) (church (m+n)).
   Proof.
     eapply RTnext; repeat constructor.
     rewrite /= !shift_closed; auto.
-  Admitted.
-  Lemma eval_add m n e : eval (m+n) e = eval m (eval n e). Admitted.
+    eapply RTnext; repeat constructor.
+    rewrite /= !open_rec_closed; auto.
+    rewrite !shift_closed; auto.
+    eapply RTnext; repeat constructor.
+    rewrite /= open_iter_app /=.
+    eapply RTnext; repeat constructor.
+    rewrite open_iter_app /=.
+    eapply RTnext.
+    repeat constructor.
+    apply reduces_iter.
+    repeat constructor.
+    rewrite /= open_iter_app /=.
+    eapply RTnext.
+    repeat constructor.
+    apply reduces_iter.
+    repeat constructor.
+    rewrite open_iter_app /=.
+    rewrite -iterD.
+    by constructor.
+  Qed.
+
   Lemma reduce_iter_app n (k : nat) x :
     reduce (iter n (App k) x) =
       if reduce x is Some x' then Some (iter n (App k) x') else None.
-  Admitted.
-  Theorem chadd_ok m n : (* reduce でも証明 (帰結ではない) *)
+  Proof.
+    elim: n => [|n IHn] //=.
+    by case: (reduce x).
+    rewrite IHn /=.
+    by case: (reduce x).
+  Qed.
+
+  Lemma eval_add m n e : eval (m+n) e = eval m (eval n e).
+  Proof.
+    elim: n e => //= [|n IHn] e.
+    + by rewrite addn0.
+    + rewrite addnS /=.
+      case He: (reduce e) => [e1|] //.
+      destruct m => //=.
+      by rewrite He.
+  Qed.
+
+  Theorem chadd_ok m n :
     exists h, exists h',
       eval h (App (App chadd (church m)) (church n)) = eval h' (church (m+n)).
   Proof.
@@ -161,7 +207,60 @@ Module Lambda.
     rewrite -!eval_add => <- /=.
     rewrite !shift_closed /=; auto.
     rewrite !open_iter_app /=.
-    do! rewrite !reduce_iter_app /=.
-      by rewrite iterD.
+    rewrite !reduce_iter_app /=.
+    rewrite !reduce_iter_app /=.
+    by rewrite iter_add.
+  Qed.
+
+  Lemma closed_expr_shift h k e :
+    closed_expr h e -> closed_expr h.+1 (shift k e).
+  Proof.
+    move: h k.
+    induction e => //= h k Hc.
+    + case: ifP => Hk /=.
+      by rewrite -(addn1 n) -(addn1 h) ltn_add2r.
+      apply ltnW.
+      by rewrite -(addn1 n) -(addn1 h) ltn_add2r.
+    + by apply IHe.
+    + move/andP: Hc => [Hc1 Hc2].
+      by rewrite IHe1 // IHe2.
+  Qed.
+
+  Lemma closed_expr_open n e1 e2 k e' :
+    closed_expr n.+1 e1 -> k <= n -> closed_expr n e2 ->
+    open_rec k e2 e1 = e' -> closed_expr n e'.
+  Proof.
+    move: n k e' e2.
+    induction e1 => // h k e' e2 He1 Hk He2 <- //=.
+    + case: ifP => Hk1 //.
+      rewrite /= in He1.
+      case: ifP => Hk2 //=.
+      destruct n.
+      by rewrite leqn0 Hk1 in Hk2.
+      rewrite succnK.
+      by rewrite -(ltn_add2r 1) !addn1.
+      rewrite leqNgt in Hk2.
+      by apply (leq_trans (negbFE Hk2)).
+    + apply (IHe1 _ (k.+1) _ (shift 0 e2)) => //.
+      by apply closed_expr_shift.
+    + move: He1 => /= /andP [He11 He12].
+      rewrite (IHe1_1 _ k _ e2) //.
+      by rewrite (IHe1_2 _ k _ e2).
+  Qed.
+
+  Lemma closed_inv n e e' :
+    closed_expr n e -> reduce e = Some e' -> closed_expr n e'.
+  Proof.
+    move=> Hc Hr.
+    apply reduce_ok in Hr.
+    move: n Hc.
+    induction Hr => //= n Hc.
+    + move/andP: Hc => [Hc1 Hc2].
+      by apply (closed_expr_open n e1 e2 0).
+    + move/andP: Hc => [Hc1 Hc2].
+      by rewrite IHHr.
+    + move/andP: Hc => [Hc1 Hc2].
+      by rewrite Hc1 IHHr.
+    + by apply IHHr.
   Qed.
 End Lambda.
